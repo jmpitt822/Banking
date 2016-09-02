@@ -14,111 +14,164 @@ public class User {
     }
 
     String name;
-    String choice;
+    String nameEntry;
     HashMap<String, Double> accountInfo = new HashMap<>();
-    Double balance;
 
 
-    public void chooseName() throws Exception {
-        System.out.println("Hello! What is your name?");
-        name = Main.scanner.nextLine();
-        if(name.length() > 0) {
-            boolean accountExists = accountInfo.get(name) != null;
-            if (accountExists) {
+    public void generateUser() {
+//        String name;
+        Double balance = new Double(0);
+        String balanceAmt = new String();
+//        String nameEntry = new String();
+        boolean a = true;
+        /*while (a) {
+            System.out.println("Hello! What is your name?");
+             nameEntry = Main.scanner.nextLine();
+            if(nameEntry.length() > 0) {
+                name = nameEntry;
+                a = false;
+            }
+            else {
+                System.out.println("Name can not be left blank");
+            }
+        }*/
+
+        while (balance <= 0) {
+            System.out.println("How much would you like to deposit?");
+            balanceAmt = Main.scanner.nextLine();
+            balance = validatePosDouble(balanceAmt);
+        }
+        accountInfo.put(name, balance);
+    }
+
+
+    public boolean chooseUser() throws Exception {
+        boolean a = true;
+        boolean b = true;
+        String nameEntry = new String();
+//        String name = nameEntry;
+
+        while (b) {
+            System.out.println("Hello! Enter your name to log in.");
+            name = Main.scanner.nextLine();
+            if (accountInfo.containsKey(name)) {
                 System.out.println("Hello, " + name +"!");
-                chooseAction();
-            } else {
+                a = false;
+                b = false;
+            }
+            else if (name.length() == 0){
+                System.out.println("Name field can not be left blank!");
+            }
+            else {
                 System.out.println("Would you like to create an account? [y/n]");
                 String acctChoice = Main.scanner.nextLine();
-                Boolean createAccount = acctChoice.equals("y");
-                if(createAccount){
-                    System.out.println("How much would you like to deposit?");
-                    String newDeposit = Main.scanner.nextLine();
-                    Double newDepositNum = Double.parseDouble(newDeposit);
-                    accountInfo.put(name, newDepositNum);
-                    //prints hash map, for testing purposes
-//                    for (String key: accountInfo.keySet()){
-//                        System.out.println("key: " + key + ", value: " + accountInfo.get(key));
-//                    }
-                    chooseAction();
+                if(acctChoice.equalsIgnoreCase("y")){
+                    generateUser();
+                    b = false;
+                }
+                else if (acctChoice.equalsIgnoreCase("n")){
+                    System.out.println("Goodbye!");
                 }
                 else{
-                    System.out.println("Goodbye!");
-                    chooseName();
+                    System.out.println("You must choose y or n!");
                 }
             }
         }
-        else {
-            throw new Exception("Name field can not be left blank!");
-        }
+        return a;
     }
-    public void chooseAction() throws Exception {
-        System.out.println("What would you like to do? [Check Balance, Withdraw, Delete Account, Cancel]");
-        choice = Main.scanner.nextLine();
+    public boolean chooseAction() throws Exception {
+        boolean b = false;
+        boolean c = true;
 
-        if(choice.equalsIgnoreCase("Check Balance")){
-            checkBalance();
-        }
-        else if(choice.equalsIgnoreCase("Withdraw")){
-            withdraw();
-
-        }
-        else if(choice.equalsIgnoreCase("Cancel")){
-            cancel();
-        }
-        else if (choice.equalsIgnoreCase("Delete Account")){
-            deleteAccount();
-        }
-        else{
-            throw new Exception("Invalid choice: " + choice);
-        }
+         do {
+            String choice = new String();
+            System.out.println("What would you like to do? [Check Balance, Withdraw, Delete Account, Cancel]");
+            choice = Main.scanner.nextLine();
+            if (choice.equalsIgnoreCase("Check Balance")) {
+                checkBalance();
+                b = true;
+            } else if (choice.equalsIgnoreCase("Withdraw")) {
+                withdraw();
+                b = true;
+            } else if (choice.equalsIgnoreCase("Cancel")) {
+                System.out.println("Thank you, and please come again.");
+                b = false;
+                c = false;
+            } else if (choice.equalsIgnoreCase("Delete Account")) {
+                b = deleteAccount();
+                c = false;
+            } else {
+                System.out.println("Invalid choice: " + choice);
+            }
+        } while(b);
+        return c;
     }
     public void checkBalance() throws Exception {
-        balance = accountInfo.get(name);
+        Double balance = accountInfo.get(name);
         System.out.println("Your balance is $" + balance);
-        chooseAction();
     }
 
     public void withdraw() throws Exception{
         String amount;
-        System.out.println("How much would you like to withdraw?");
-        amount = Main.scanner.nextLine();
-        Double numAmount = Double.parseDouble(amount);
-        if(numAmount <= accountInfo.get(name)){
-            balance = (accountInfo.get(name) - numAmount);
-            if(balance >= 0){
+
+        Double balance = (accountInfo.get(name));
+        boolean a = true;
+        while (a) {
+            Double withdrawal = new Double(0);
+
+            while (withdrawal <= 0) {
+                System.out.println("How much would you like to withdraw?");
+                amount = Main.scanner.nextLine();
+                withdrawal = validatePosDouble(amount);
+            }
+
+
+            if (withdrawal <= balance) {
+                balance -= withdrawal;
                 System.out.println("Please take your money. Your new balance is $" + balance);
                 accountInfo.put(name, balance);
-                chooseAction();
+                a = false;
+
+            } else {
+                System.out.println("Error: Insufficient funds");
             }
-            else {
-                throw new Exception("Error: Insufficient funds");
-            }
-        }
-        else{
-            throw new Exception("Error: Insufficient funds");
         }
 
     }
-    public void deleteAccount() throws Exception {
+    public boolean deleteAccount() throws Exception {
+        boolean a = true;
+        boolean b = true;
         System.out.println("Are you sure you want to delete your account? [y/n]");
         String deleteChoice = Main.scanner.nextLine();
-        boolean confirmDelete = deleteChoice.equals("y");
-        if(confirmDelete){
-            accountInfo.remove(name);
-            System.out.println("Account deleted.");
-            chooseName();
+        while (b) {
+            if (deleteChoice.equalsIgnoreCase("y")) {
+                accountInfo.remove(name);
+                System.out.println("Account deleted.");
+                a = false;
+                b = false;
 //            for (String key: accountInfo.keySet()){
 //                System.out.println("key: " + key + ", value: " + accountInfo.get(key));
 //            }
+            }
+            else if (deleteChoice.equalsIgnoreCase("n")){
+                b = false;
+            }
+            else {
+                System.out.println();
+            }
         }
-        else{
-            chooseAction();
-        }
+        return a;
     }
-    public void cancel() throws Exception {
-        System.out.println("Thank you, and please come again.");
-        chooseName();
+
+
+    public Double validatePosDouble(String s){
+        Double b = new Double(0);
+        try {
+            b = Double.parseDouble(s);
+        } catch (Exception e) {
+            System.out.println("Please enter a valid number");
+        }
+        return  b;
     }
 
 }
