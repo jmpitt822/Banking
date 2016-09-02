@@ -141,9 +141,10 @@ public class User {
     public boolean deleteAccount() throws Exception {
         boolean a = true;
         boolean b = true;
-        System.out.println("Are you sure you want to delete your account? [y/n]");
-        String deleteChoice = Main.scanner.nextLine();
+        String deleteChoice = new String();
         while (b) {
+            System.out.println("Are you sure you want to delete your account? [y/n]");
+            deleteChoice = Main.scanner.nextLine();
             if (deleteChoice.equalsIgnoreCase("y")) {
                 accountInfo.remove(name);
                 System.out.println("Account deleted.");
@@ -157,7 +158,7 @@ public class User {
                 b = false;
             }
             else {
-                System.out.println();
+                System.out.println("Error: must choose y or n");
             }
         }
         return a;
