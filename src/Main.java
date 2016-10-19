@@ -8,12 +8,10 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-//        user.generateUser();
 
         boolean b = true;
 
         while (b) {
-//            boolean a = true;
             user.chooseUser();
 
             boolean d = true;
