@@ -5,23 +5,21 @@
 import java.util.HashMap;
 
 
- class User {
+class User {
 
-     User() {
+    User() {
         accountInfo.put("Jeremy", 100.00);
         accountInfo.put("John", 117.00);
         accountInfo.put("Linda", 58.00);
     }
 
     String name;
-    String nameEntry;
     HashMap<String, Double> accountInfo = new HashMap<>();
 
 
     public void generateUser() {
         Double balance = new Double(0);
-        String balanceAmt = new String();
-        boolean a = true;
+        String balanceAmt;
 
         while (balance <= 0) {
             System.out.println("How much would you like to deposit?");
@@ -35,7 +33,6 @@ import java.util.HashMap;
     public boolean chooseUser() throws Exception {
         boolean a = true;
         boolean b = true;
-        String nameEntry = new String();
 
         while (b) {
             System.out.println("Hello! Enter your name to log in.");
@@ -44,7 +41,7 @@ import java.util.HashMap;
                 System.out.println("Hello, " + name + "!");
                 a = false;
                 b = false;
-            } else if (name.length() == 0) {
+            } else if (name.isEmpty()) {
                 System.out.println("Name field can not be left blank!");
             } else {
                 System.out.println("Would you like to create an account? [y/n]");
@@ -67,21 +64,21 @@ import java.util.HashMap;
         boolean c = true;
 
         do {
-            String choice = new String();
-            System.out.println("What would you like to do? [Check Balance, Withdraw, Delete Account, Cancel]");
+            String choice;
+            System.out.println("What would you like to do? [1. Check Balance, 2. Withdraw, 3. Delete Account, 4. Cancel]");
             choice = Main.scanner.nextLine();
-            if (choice.equalsIgnoreCase("Check Balance")) {
+            if (choice.equalsIgnoreCase("1")) {
                 checkBalance();
                 b = true;
-            } else if (choice.equalsIgnoreCase("Withdraw")) {
+            } else if (choice.equalsIgnoreCase("2")) {
                 withdraw();
                 b = true;
-            } else if (choice.equalsIgnoreCase("Cancel")) {
+            } else if (choice.equalsIgnoreCase("3")) {
+                b = deleteAccount();
+                c = false;
+            } else if (choice.equalsIgnoreCase("4")) {
                 System.out.println("Thank you, and please come again.");
                 b = false;
-                c = false;
-            } else if (choice.equalsIgnoreCase("Delete Account")) {
-                b = deleteAccount();
                 c = false;
             } else {
                 System.out.println("Invalid choice: " + choice);
@@ -126,7 +123,7 @@ import java.util.HashMap;
     public boolean deleteAccount() throws Exception {
         boolean a = true;
         boolean b = true;
-        String deleteChoice = new String();
+        String deleteChoice;
         while (b) {
             System.out.println("Are you sure you want to delete your account? [y/n]");
             deleteChoice = Main.scanner.nextLine();
